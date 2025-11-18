@@ -1,4 +1,7 @@
-def prov_vvod_time(time):
+def prov_vvod_time(time):#Вторая проверка на правильный ввод часов
+    #Ввод времени
+    
+    #Проверка на правильный ввод часов
     if time[0].isdigit():
         if 0 <= int(time[0]) <= 23:
             prav_vvod_hour = True
@@ -7,6 +10,7 @@ def prov_vvod_time(time):
     else:
         prav_vvod_hour = False
 
+    #Проверка на правильный ввод минут
     if time[1].isdigit():
         if 0 <= int(time[1]) <= 59:
             prav_vvod_minute = True
@@ -15,6 +19,7 @@ def prov_vvod_time(time):
     else:
         prav_vvod_minute = False
 
+    #Проверка пройдена, или указываем, из-за чего произошла ошибка
     if prav_vvod_hour and prav_vvod_minute:
         return True
     elif prav_vvod_hour and not prav_vvod_minute:
@@ -27,8 +32,10 @@ def prov_vvod_time(time):
         print("Введены недопустимые данные: часы должны быть от 0 до 23, минуты должны быть от 0 до 59.")
         return False
 
-def prov_vvoda(vvod):
-    time = list(vvod.split())
+def prov_vvoda(vvod):#Первая проверка на правильный ввод часов
+    #Вводим время
+    time = list(vvod.split())#Разбиваем введённое время на часы и минуты
+    #Проверяем, введены только часы и минуты, значит продолжаем проверку, или есть дополнительные элементы, тогда указываем ошибку
     if len(time) > 2:
         print("Введено больше двух чисел, надо ввести время в формате 'часы минуты'.")
         return False
@@ -38,8 +45,10 @@ def prov_vvoda(vvod):
     else:
         return prov_vvod_time(time)
 
-def pad_hour(hour):
+def obr_hour(hour):#Изменение формы слова "часы" и само значение часов
+    #Вводим часы
     razg_hour = hour % 12
+    #Изменяем форму слова "часы" в зависимости от количества часов
     if razg_hour == 0:
         return "12 часов"
     elif razg_hour == 1:
@@ -49,7 +58,9 @@ def pad_hour(hour):
     else:
         return "{} часов".format(razg_hour)
 
-def pad_minute(minute):
+def obr_minute(minute):#Изменение формы слова "минуты" и само значение минут
+    #Вводим минуты
+    #Изменяем форму слова "минуты" в зависимости от количества минут
     if minute == 0:
         return "ровно"
     elif minute % 10 == 1 and minute != 11:
@@ -59,7 +70,9 @@ def pad_minute(minute):
     else:
         return "{} минут".format(minute)
     
-def prom_time(hour):
+def prom_time(hour):#Обработка промежутка времени в зависимости от количества часов
+    #Вводим часы
+    #Выбираем правильный промежуток времени в зависимости от количества часов
     if 0 <= hour <= 5:
         return "ночи"
     elif 6 <= hour <= 11:
@@ -69,23 +82,25 @@ def prom_time(hour):
     else:
         return "вечера"
 
-def main():
+def main():#Начало
     print("Введите время в формате 'часы минуты':")
-    vvod = input()
-    while not prov_vvoda(vvod):
+    vvod = input()#Вводим время
+    while not prov_vvoda(vvod):#Проверка формата времени, если неправильный формат, то снова вводим время"
+        print()
         print("Введите время в формате 'часы минуты':")
         vvod = input()
+    #Обрабатываем случаи с полночью и полднем, и, если эти результаты не подходит, используем основной алгоритм
     if vvod == "00 00":
         print("полночь")
     elif vvod == "12 00":
         print("полдень")
     else:
-        ch_time = list(map(int, vvod.split()))
-        otv_time = pad_hour(ch_time[0])
+        ch_time = list(map(int, vvod.split()))#Делим правильный формат времени на часы и минуты
+        #Создаём строку с ответом. Если количество минут равно 0, то после обработки часов сначала добавляем промежуток времени, а потом слово "ровно"
         if ch_time[1] == 0:
-            otv_time = "{} {} {}".format(pad_hour(ch_time[0]), prom_time(ch_time[0]), pad_minute(ch_time[1]))
+            otv_time = "{} {} {}".format(obr_hour(ch_time[0]), prom_time(ch_time[0]), obr_minute(ch_time[1]))
         else:
-            otv_time = "{} {} {}".format(pad_hour(ch_time[0]), pad_minute(ch_time[1]), prom_time(ch_time[0]))
-        print(otv_time)
+            otv_time = "{} {} {}".format(obr_hour(ch_time[0]), obr_minute(ch_time[1]), prom_time(ch_time[0]))
+        print(otv_time)#Выводим ответ
 if __name__ == "__main__":
     main()
