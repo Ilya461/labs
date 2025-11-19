@@ -49,8 +49,10 @@ def obr_hour(hour):#Изменение формы слова "часы" и са�
     #Вводим часы
     razg_hour = hour % 12
     #Изменяем форму слова "часы" в зависимости от количества часов
-    if razg_hour == 0:
+    if hour == 12:
         return "12 часов"
+    elif hour == 0:
+        return "0 часов"
     elif razg_hour == 1:
         return "1 час"
     elif 2 <= razg_hour <= 4:
