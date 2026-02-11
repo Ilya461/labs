@@ -1,5 +1,16 @@
 import random
-#сортировка слиянием
+def pr(s):
+    s_pr = s.replace("-", "")
+    lst = s_pr.split()
+    if len(lst) == 0:
+        return False
+    else:
+        flag = True
+        for i in lst:
+            if not i.isdigit():
+                flag = False
+        return flag
+
 def selection_sort(lst):
     col_sr = col_perest = 0
     for i in range(len(lst) - 1):
@@ -7,6 +18,7 @@ def selection_sort(lst):
         lst[i], lst[mn_ind] = lst[mn_ind], lst[i]
         col_perest += 1
     return ["выбором", col_sr, col_perest, lst]
+
 def find_min_ind(lst, start):
     work_lst = (lst[start:]).copy()
     col_sr = 0
@@ -16,27 +28,69 @@ def find_min_ind(lst, start):
         if work_lst[min_ind] > work_lst[i]:
             min_ind = i
     return [min_ind + start, col_sr]
+
 def bubble_sort(lst):
-    col_sr = col_perest = 0
+    col_sr = col_perest = perest = 0
     for i in range(len(lst) - 1):
         for j in range(len(lst) - i - 1):
             col_sr += 1
             if lst[j] > lst[j + 1]:
                 lst[j], lst[j + 1] = lst[j + 1], lst[j]
-                col_perest += 1
+                perest += 1
+        if perest == 0:
+            break
+        col_perest, perest = col_perest + perest, 0
     return ["пузырьком", col_sr, col_perest, lst]
+
+def merge_sort(lst):
+    if len(lst) == 1:
+        return [0, 0, lst]
+    else:
+        lch = lst[:(len(lst) // 2)]
+        rch = lst[(len(lst) // 2):]
+        col_sr_l, col_perest_l, lch = merge_sort(lch)
+        col_sr_r, col_perest_r, rch = merge_sort(rch)
+        col_sr_m, col_perest_m, merge_lst = merge(lch, rch)
+        return [(col_sr_m + col_sr_l + col_sr_r), (col_perest_m + col_perest_l + col_perest_r), merge_lst]
+    
+def merge(lch, rch):
+    lst = []
+    l = r = col_sr = col_perest = 0
+    while (len(lch) > l) and (len(rch) > r):
+        if lch[l] < rch[r]:
+            lst.append(lch[l])
+            l += 1
+        else:
+            lst.append(rch[r])
+            r += 1
+        col_sr += 1
+        col_perest += 1
+    while l < len(lch):
+        lst.append(lch[l])
+        l += 1
+        col_perest += 1
+    while r < len(rch):
+        lst.append(rch[r])
+        r += 1
+        col_perest += 1
+    return col_sr, col_perest, lst
+
 def vivod(lst):
-    lst_s, lst_b = lst.copy(), lst.copy()
-    srt_s, srt_b = selection_sort(lst_s), bubble_sort(lst_b)
+    lst_s, lst_b, lst_m = lst.copy(), lst.copy(), lst.copy()
+    srt_s, srt_b, srt_m = selection_sort(lst_s), bubble_sort(lst_b), merge_sort(lst_m)
+    srt_m.insert(0, "слиянием")
     print("Сортировка выбором:", *(srt_s[3]))
     print("Сортировка пузырьком:", *(srt_b[3]))
+    print("Сортировка слиянием:", *(srt_m[3]))
     lst_form = ["Сортировка", "Количество сравнений", "Количество перестановок"]
-    otv = [lst_form, srt_s, srt_b]
+    otv = [lst_form, srt_s, srt_b, srt_m]
     print()
-    for i in range(3):
+    for i in range(4):
         for j in range(3):
             print(str(otv[i][j]).ljust(27), end = "")
-        print()    
+        print()
+        
+        
 def main():
     print("Выберите режим работы:")
     print("1 - демонстративный")
@@ -54,25 +108,74 @@ def main():
         print(*lst)
         vivod(lst)
     elif mode == "2":
+        lst = []
         deistv = 0
-        while deistv != "6":
+        while deistv != "7":
+            print()
             print("Выберите действие:")
-            print("1 - ввести массив")
+            print("1 - ввести массив или ввести заново")
             print("2 - изменить массив")
             print("3 - сортировка выбором")
             print("4 - сортировка пузырьком")
-            print("5 - вывод таблицы сравнения сортировок")
-            print("6 - выход")
+            print("5 - сортировка слиянием")
+            print("6 - вывод таблицы сравнения сортировок")
+            print("7 - выход")
             deistv = input()
-            while (deistv != "1") and (deistv != "2") and (deistv != "3") and (deistv != "4") and (deistv != "5") and (deistv != "6"):
-                print("Введите цифру: 1, 2, 3, 4, 5 или 6, обозначающую действие:")
+            
+            while (deistv != "1") and (deistv != "2") and (deistv != "3") and (deistv != "4") and (deistv != "5") and (deistv != "6") and (deistv != "7"):
+                print("Введите цифру: 1, 2, 3, 4, 5, 6 или 7, обозначающую действие:")
                 deistv = input()
-                print(deistv)
-                print(deistv == "6")
+            
             if deistv == "1":
-                print("Введите числа для массива на одной строке, через пробел:")
-                lst = input().split()
-                #while not pr(lst):
+                print("Введите целые числа для массива на одной строке, через пробел:")
+                lst = input()
+                while (not pr(lst)) or len(lst) == 0:
+                    print("Введите целые числа для массива на одной строке, через пробел:")
+                    lst = input()
+                lst = list(map(int, lst.split()))
+                print("Вы успешно ввели массив!")
+            
+            elif deistv == "2":
+                if len(lst) == 0:
+                    print("Вы ещё не ввели массив!")
+                #else:            
+                    #изменения массива
+            
+            elif deistv == "3":
+                if len(lst) == 0:
+                    print("Вы ещё не ввели массив!")
+                else:
+                    lst_s = lst.copy()
+                    srt_s = selection_sort(lst_s)
+                    print("После сортировки выбором:", *(srt_s[3]))
+                    print("Количество сравнений:", srt_s[1])
+                    print("Количество перестановок:", srt_s[2])
+            
+            elif deistv == "4":
+                if len(lst) == 0:
+                    print("Вы ещё не ввели массив!")
+                else:
+                    lst_b = lst.copy()
+                    srt_b = bubble_sort(lst_b)
+                    print("После сортировки пузырьком:", *(srt_b[3]))
+                    print("Количество сравнений:", srt_b[1])
+                    print("Количество перестановок:", srt_b[2])
+            
+            elif deistv == "5":
+                if len(lst) == 0:
+                    print("Вы ещё не ввели массив!")
+                else:
+                    lst_m = lst.copy()
+                    srt_m = merge_sort(lst_m)
+                    print("После сортировки слиянием:", *(srt_m[2]))
+                    print("Количество сравнений:", srt_m[0])
+                    print("Количество перестановок:", srt_m[1])  
+            
+            elif deistv == "6":
+                if len(lst) == 0:
+                    print("Вы ещё не ввели массив!")
+                else:                
+                    vivod(lst)
                     
 if __name__ == "__main__":
     main()
