@@ -10,6 +10,13 @@ def pr(s):
             if not i.isdigit():
                 flag = False
         return flag
+    
+def pr_ind(ind, end):
+    flag = False
+    if ind.isdigit():
+        if 0 <= int(ind) <= end:
+            flag = True
+    return flag
 
 def selection_sort(lst):
     col_sr = col_perest = 0
@@ -110,20 +117,21 @@ def main():
     elif mode == "2":
         lst = []
         deistv = 0
-        while deistv != "7":
+        while deistv != "8":
             print()
             print("Выберите действие:")
             print("1 - ввести массив или ввести заново")
-            print("2 - изменить массив")
-            print("3 - сортировка выбором")
-            print("4 - сортировка пузырьком")
-            print("5 - сортировка слиянием")
-            print("6 - вывод таблицы сравнения сортировок")
-            print("7 - выход")
+            print("2 - вывести массив")
+            print("3 - изменить массив")
+            print("4 - сортировка выбором")
+            print("5 - сортировка пузырьком")
+            print("6 - сортировка слиянием")
+            print("7 - вывод таблицы сравнения сортировок")
+            print("8 - выход")
             deistv = input()
             
-            while (deistv != "1") and (deistv != "2") and (deistv != "3") and (deistv != "4") and (deistv != "5") and (deistv != "6") and (deistv != "7"):
-                print("Введите цифру: 1, 2, 3, 4, 5, 6 или 7, обозначающую действие:")
+            while (deistv != "1") and (deistv != "2") and (deistv != "3") and (deistv != "4") and (deistv != "5") and (deistv != "6") and (deistv != "7") and (deistv != "8"):
+                print("Введите цифру: 1, 2, 3, 4, 5, 6, 7 или 8, обозначающую действие:")
                 deistv = input()
             
             if deistv == "1":
@@ -138,10 +146,62 @@ def main():
             elif deistv == "2":
                 if len(lst) == 0:
                     print("Вы ещё не ввели массив!")
-                #else:            
-                    #изменения массива
-            
+                else:                  
+                    print("Текущий массив:")
+                    print(*lst)
+                    
             elif deistv == "3":
+                if len(lst) == 0:
+                    print("Вы ещё не ввели массив!")
+                else:            
+                    print("Выберите действие:")
+                    print("1 - изменить элемент массива")
+                    print("2 - изменить часть массива")
+                    deistv_izm = input()
+                    while (deistv_izm != "1") and (deistv_izm != "2"):
+                        print("Введите цифру: 1 или 2, обозначающую действие:")
+                        deistv_izm = input()
+                    
+                    if deistv_izm == "1":
+                        print("Введите номер элемента, начиная с 0 и заканчивая ", (len(lst) - 1), ":", sep = "")
+                        ind = input()
+                        end = len(lst) - 1
+                        while not pr_ind(ind, end):
+                            print("Введите номер элемента, начиная с 0 и заканчивая ", (len(lst) - 1), ":", sep = "")
+                            ind = input()
+                        print("Введите элемент(целое число):")
+                        ch = input()
+                        while not (ch.replace("-", "", 1)).isdigit():
+                            print("Введите элемент(целое число):")
+                            ch = input()
+                        lst[int(ind)] = ch
+                        print("Вы успешно изменили массив!")
+                    
+                    if deistv_izm == "2":
+                        first = last = 0
+                        end = len(lst) - 1
+                        while int(first) >= int(last):
+                            print("Введите два числа на разных строках, обозначающие номера начального и последнего элемента для изменения части массива, от 0 до ", (len(lst) - 1), ", первое число должно быть меньше второго:", sep = "")
+                            first = input()
+                            while not pr_ind(first, end):
+                                print("Введите номер элемента, начиная с 0 и заканчивая ", (len(lst) - 1), ":", sep = "")
+                                first = input()
+                            last = input()
+                            while not pr_ind(last, end):
+                                print("Введите номер элемента, начиная с 0 и заканчивая ", (len(lst) - 1), ":", sep = "")
+                                last = input()
+                        last = int(last)
+                        first = int(first)
+                        print("Введите новую часть массива:", (last - first + 1), "целых чисел на одной строке, через пробел:")
+                        part = input()
+                        while (not pr(part)) and len(part.split()) != (last - first + 1):
+                            print("Введите целые числа для изменения части массива на одной строке, через пробел:")
+                            part = input()
+                        part = list(map(int, part.split()))
+                        lst[first:(last + 1)] = part
+                        print("Вы успешно изменили массив!")
+            
+            elif deistv == "4":
                 if len(lst) == 0:
                     print("Вы ещё не ввели массив!")
                 else:
@@ -151,7 +211,7 @@ def main():
                     print("Количество сравнений:", srt_s[1])
                     print("Количество перестановок:", srt_s[2])
             
-            elif deistv == "4":
+            elif deistv == "5":
                 if len(lst) == 0:
                     print("Вы ещё не ввели массив!")
                 else:
@@ -161,7 +221,7 @@ def main():
                     print("Количество сравнений:", srt_b[1])
                     print("Количество перестановок:", srt_b[2])
             
-            elif deistv == "5":
+            elif deistv == "6":
                 if len(lst) == 0:
                     print("Вы ещё не ввели массив!")
                 else:
@@ -171,7 +231,7 @@ def main():
                     print("Количество сравнений:", srt_m[0])
                     print("Количество перестановок:", srt_m[1])  
             
-            elif deistv == "6":
+            elif deistv == "7":
                 if len(lst) == 0:
                     print("Вы ещё не ввели массив!")
                 else:                
