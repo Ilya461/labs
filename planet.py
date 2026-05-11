@@ -17,8 +17,8 @@ class Planet:
         self._mass = float(mass)
         self._distance_from_sun = float(distance_from_sun)
         self._planet_type = planet_type
-        Planet.__ID += 1
         if ID == 0:
+            Planet.__ID += 1
             self.__planet_ID = Planet.__ID
             print(f"Создание ID {self.__planet_ID}")
         else:
@@ -34,7 +34,7 @@ class Planet:
         return (f"{self._name}, {self._radius}, {self._mass}, {self._distance_from_sun}, {self._planet_type}, {self.__planet_ID}")
     
     def __copy__(self):
-        new_planet = Planet(self._name, self._radius, self._mass, self._distance_from_sun, self._planet_type)
+        new_planet = Planet(self._name, self._radius, self._mass, self._distance_from_sun, self._planet_type, self.__planet_ID)
         return new_planet
     
     def __eq__(self, other):
@@ -163,7 +163,10 @@ class Planet:
                 info_lst[5] = int(info_lst[5])
             except ValueError:
                 raise ValueError("ID планеты должно быть положительным целым числом")
-            return cls(info_lst[0], info_lst[1], info_lst[2], info_lst[3], info_lst[4], info_lst[5])
+            if info_lst[5] > Planet.__ID:
+                Planet.__ID = info_lst[5]          
+            planet = cls(info_lst[0], info_lst[1], info_lst[2], info_lst[3], info_lst[4], info_lst[5])                     
+            return planet
 
 
 class Planet_Database:
@@ -191,47 +194,43 @@ class Planet_Database:
         with open(self.__filename, "w", encoding = "utf-8") as database:
             for planet in self._planets:
                 print(repr(planet), file = database)
-        
-    def sort_database(self, mode):
-        if not(mode in (1, 2, 3, 4, 5, 6)):
-            raise ValueError("Введите 1, чтобы сортировать по имени планеты; 2 - по радиусу; 3 - по массе; 4 - по расстоянию от Солнца до планеты; 5 - по типу планеты; 6 - по ID")
-        
-        if mode == 1:
-            for i in range(len(self._planets) - 1):
-                for j in range(len(self._planets) - 1 - i):
-                    if self._planets[j].name > self._planets[j + 1].name:
-                        self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j] 
-        
-        elif mode == 2:
-            for i in range(len(self._planets) - 1):
-                for j in range(len(self._planets) - 1 - i):
-                    if self._planets[j].radius > self._planets[j + 1].radius:
-                        self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j] 
-        
-        elif mode == 3:
-            for i in range(len(self._planets) - 1):
-                for j in range(len(self._planets) - 1 - i):
-                    if self._planets[j].mass > self._planets[j + 1].mass:
-                        self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j] 
-                        
-        elif mode == 4:
-            for i in range(len(self._planets) - 1):
-                for j in range(len(self._planets) - 1 - i):
-                    if self._planets[j] > self._planets[j + 1]:
-                        self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j]
-        
-        elif mode == 5:
-            for i in range(len(self._planets) - 1):
-                for j in range(len(self._planets) - 1 - i):
-                    if self._planets[j].planet_type > self._planets[j + 1].planet_type:
-                        self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j] 
-                    
-        else:
-            for i in range(len(self._planets) - 1):
-                for j in range(len(self._planets) - 1 - i):
-                    if self._planets[j].planet_ID > self._planets[j + 1].planet_ID:
-                        self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j]         
     
+    def sort_database_name(self):
+        for i in range(len(self._planets) - 1):
+            for j in range(len(self._planets) - 1 - i):
+                if self._planets[j].name > self._planets[j + 1].name:
+                    self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j]
+    
+    def sort_database_radius(self):
+        for i in range(len(self._planets) - 1):
+            for j in range(len(self._planets) - 1 - i):
+                if self._planets[j].radius > self._planets[j + 1].radius:
+                    self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j]
+                    
+    def sort_database_mass(self):
+        for i in range(len(self._planets) - 1):
+            for j in range(len(self._planets) - 1 - i):
+                if self._planets[j].mass > self._planets[j + 1].mass:
+                    self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j]
+                    
+    def sort_database_distance_from_sun(self):
+        for i in range(len(self._planets) - 1):
+            for j in range(len(self._planets) - 1 - i):
+                if self._planets[j] > self._planets[j + 1]:
+                    self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j]
+                    
+    def sort_database_planet_type(self):
+        for i in range(len(self._planets) - 1):
+            for j in range(len(self._planets) - 1 - i):
+                if self._planets[j].planet_type > self._planets[j + 1].planet_type:
+                    self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j]
+                    
+    def sort_database_planet_ID(self):
+        for i in range(len(self._planets) - 1):
+            for j in range(len(self._planets) - 1 - i):
+                if self._planets[j].planet_ID > self._planets[j + 1].planet_ID:
+                    self._planets[j], self._planets[j + 1] = self._planets[j + 1], self._planets[j]        
+            
     def clear_database(self):
         self._planets = list()
         with open(self.__filename, "w", encoding = "utf-8") as database:
@@ -250,25 +249,44 @@ class Planet_Database:
         if not(planet in self._planets):
             raise ValueError("Планета не найдена")
         self._planets.remove(planet)
-         
-    def edit_planet(self, old_planet, new_name = None, new_radius = None, new_mass = None, new_distance_from_sun = None, new_planet_type = None):
+            
+    def edit_planet_name(self, old_planet, new_name):
         if not(isinstance(old_planet, Planet)):
             raise ValueError("Редактировать можно только планету")
         if not(old_planet in self._planets):
             raise ValueError("Планета не найдена")
-        if not(new_name is None):
-            for planet in self._planets:
-                if (planet.name == new_name) and (planet != old_planet):
-                    raise ValueError("Планета с таким названием уже есть")
-            old_planet.name = new_name
-        if not(new_radius is None):
-            old_planet.radius = new_radius
-        if not(new_mass is None):
-            old_planet.mass = new_mass
-        if not(new_distance_from_sun is None):
-            old_planet.distance_from_sun = new_distance_from_sun
-        if not(new_planet_type is None):
-            old_planet.planet_type = new_planet_type
+        for planet in self._planets:
+            if (planet.name == new_name) and (planet != old_planet):
+                raise ValueError("Планета с таким названием уже есть")
+        old_planet.name = new_name
+        
+    def edit_planet_radius(self, old_planet, new_radius):
+        if not(isinstance(old_planet, Planet)):
+            raise ValueError("Редактировать можно только планету")
+        if not(old_planet in self._planets):
+            raise ValueError("Планета не найдена")
+        old_planet.radius = new_radius
+    
+    def edit_planet_mass(self, old_planet, new_mass):
+        if not(isinstance(old_planet, Planet)):
+            raise ValueError("Редактировать можно только планету")
+        if not(old_planet in self._planets):
+            raise ValueError("Планета не найдена")
+        old_planet.mass = new_mass
+        
+    def edit_planet_distance_from_sun(self, old_planet, new_distance_from_sun):
+        if not(isinstance(old_planet, Planet)):
+            raise ValueError("Редактировать можно только планету")
+        if not(old_planet in self._planets):
+            raise ValueError("Планета не найдена")
+        old_planet.distance_from_sun = new_distance_from_sun
+        
+    def edit_planet_planet_type(self, old_planet, new_planet_type):
+        if not(isinstance(old_planet, Planet)):
+            raise ValueError("Редактировать можно только планету")
+        if not(old_planet in self._planets):
+            raise ValueError("Планета не найдена")
+        old_planet.planet_type = new_planet_type
     
     def view_planets(self):
         for planet in self._planets:
