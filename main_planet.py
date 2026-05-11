@@ -45,8 +45,19 @@ def main():
             print("5 - по типу планеты")
             print("6 - по ID")
             value = choice_mode(1, 6)
-            database.sort_database(value)
-            print("База данных успешно отсортировна!")
+            if value == 1:
+                database.sort_database_name()
+            elif value == 2:
+                database.sort_database_radius()
+            elif value == 3:
+                database.sort_database_mass()
+            elif value == 4:
+                database.sort_database_distance_from_sun()
+            elif value == 5:
+                database.sort_database_planet_type()
+            else:
+                database.sort_database_planet_ID()            
+            print("База данных успешно отсортирована!")
             
         elif mode == 4:
             print("Введите информацию о новой планете по шаблону:")
@@ -70,7 +81,12 @@ def main():
             flag = False
             if value_delete == 1:
                 print("Введите имя планеты:")
-                name_planet = input()
+                while True:
+                        name_planet = input()
+                        if len(name_planet.strip()) != 0:
+                            break
+                        else:
+                            print("Название планеты должно быть непустой строкой")
                 for planet in database.planets:
                     if planet.name == name_planet:
                         database.delete_planet(planet)
@@ -103,7 +119,12 @@ def main():
             flag = False
             if value_choice == 1:
                 print("Введите имя планеты:")
-                name_planet = input()
+                while True:
+                        name_planet = input()
+                        if len(name_planet.strip()) != 0:
+                            break
+                        else:
+                            print("Название планеты должно быть непустой строкой")
                 for planet in database.planets:
                     if planet.name == name_planet:
                         flag = True
@@ -133,47 +154,52 @@ def main():
                 value_edit = choice_mode(1, 5)
                 if value_edit == 1:
                     print("Введите новое имя планеты:")
-                    new_name_planet = input()
-                    database.edit_planet(planet, new_name_planet)
+                    while True:
+                        new_name_planet = input()
+                        if len(new_name_planet.strip()) != 0:
+                            break
+                        else:
+                            print("Название планеты должно быть непустой строкой")
+                    database.edit_planet_name(planet, new_name_planet)
                 
                 elif value_edit == 2:
                     print("Введите новый радиус планеты:")
                     while True:
                         new_radius_planet = input()
                         try:
-                            new_radius = int(new_radius_planet)
+                            new_radius = float(new_radius_planet)
                             if new_radius > 0:
                                 break
                         except:
                             print("Радиус планеты - это положительное число")
                         print("Радиус планеты - это положительное число")
-                    database.edit_planet(planet, None, new_radius)
+                    database.edit_planet_radius(planet, new_radius)
                 
                 elif value_edit == 3:
                     print("Введите новую массу планеты:")
                     while True:
                         new_mass_planet = input()
                         try:
-                            new_mass = int(new_mass_planet)
+                            new_mass = float(new_mass_planet)
                             if new_mass > 0:
                                 break
                         except:
                             print("Масса планеты - это положительное число")
                         print("Масса планеты - это положительное число")
-                    database.edit_planet(planet, None, None, new_mass)
+                    database.edit_planet_mass(planet, new_mass)
                 
                 elif value_edit == 4:
                     print("Введите новое расстояние от Солнца до планеты:")
                     while True:
                         new_distance_from_sun_to_planet = input()
                         try:
-                            new_distance_from_sun = int(new_distance_from_sun_to_planet)
+                            new_distance_from_sun = float(new_distance_from_sun_to_planet)
                             if new_distance_from_sun > 0:
                                 break
                         except:
                             print("Расстояние от Солнца до планеты - это положительное число")
                         print("Расстояние от Солнца до планеты - это положительное число")
-                    database.edit_planet(planet, None, None, None, new_distance_from_sun)
+                    database.edit_planet_distance_from_sun(planet, new_distance_from_sun)
                 
                 else:
                     print("Введите новый тип планеты:")
@@ -181,7 +207,9 @@ def main():
                         new_planet_type = input()
                         if new_planet_type in ("каменная", "газовый гигант", "ледяной гигант"):
                             break
-                    database.edit_planet(planet, None, None, None, None, new_planet_type)
+                        else:
+                            print("Типы планет: каменная, газовый гигант, ледяной гигант")
+                    database.edit_planet_planet_type(planet, new_planet_type)
                                          
                 print("Поле успешно изменено!")
             else:
