@@ -1,7 +1,7 @@
 class Car:
     __ID = 0
     
-    def __init__(self, brand, model, year, VIN, color, mileage, ID = 0, creation_inf = True):
+    def __init__(self, brand, model, year, VIN, color, mileage, ID = 0):
         if not(isinstance(brand, str)) or (len(brand.strip()) == 0):
             raise ValueError("Марка машины должна быть непустой строкой")
         if not(isinstance(model, str)) or (len(model.strip()) == 0):
@@ -26,8 +26,7 @@ class Car:
         if ID == 0:
             Car.__ID += 1
             self.__car_ID = Car.__ID
-            if creation_inf:
-                print(f"Создание ID {self.__car_ID}")
+            print(f"Создание ID {self.__car_ID}")
         else:
             self.__car_ID = ID    
             
@@ -41,7 +40,7 @@ class Car:
         return (f"{self._brand}, {self._model}, {self._year}, {self.__VIN}, {self._color}, {self._mileage}, {self.__car_ID}")
     
     def __copy__(self):
-        new_car = Car(self._brand, self._model, self._year, self.__VIN, self._color, self._mileage, self.__car_ID, False)
+        new_car = Car(self._brand, self._model, self._year, self.__VIN, self._color, self._mileage, self.__car_ID)
         return new_car
     
     def __eq__(self, other):
