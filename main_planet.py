@@ -12,7 +12,7 @@ def choice_mode(min_value, max_value):
             print(f"Введите число от {min_value} до {max_value}, обозначающее режим работы")
             
 def main():
-    database = Planet_Database("database.txt")
+    database = Planet_Database("database_planet.txt")
     database.read_database()
     print("База данных успешно загружена!")
     print()
@@ -26,7 +26,7 @@ def main():
     print("7 - Вывод БД на экран")
     print("8 - Выход(Не забудьте сохранить в базу данных все изменения!)")
     mode = choice_mode(1, 8)
-    while mode != 8:
+    while True:
         print()
         if mode == 1:
             database.read_database()
@@ -217,6 +217,22 @@ def main():
         
         elif mode == 7:
             database.view_planets()
+            
+        elif mode == 8:
+            print("Вы уверены, что сохранили все изменения или не хотите их сохранять?")
+            print("1 - да")
+            print("2 - нет")
+            while True:
+                ans = input()
+                try:
+                    if int(ans) in (1, 2):
+                        break
+                    else:
+                        print("Введите цифру, означающую ваш ответ")
+                except:
+                    print("Введите цифру, означающую ваш ответ")
+            if int(ans) == 1:
+                break            
             
         print()
         print("Выберите действие:")
