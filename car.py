@@ -183,6 +183,10 @@ class Car_Database:
     def cars(self):
         return self._cars
     
+    @property
+    def filename(self):
+        return self.__filename
+    
     def read_database(self):
         self._cars = list()
         with open(self.__filename, "r", encoding = "utf-8") as database:
