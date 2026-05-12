@@ -255,6 +255,8 @@ class Planet_Database:
             raise ValueError("Редактировать можно только планету")
         if not(old_planet in self._planets):
             raise ValueError("Планета не найдена")
+        if not(isinstance(new_name, str)) or (len(new_name.strip()) == 0):
+            raise ValueError("Название планеты должно быть непустой строкой")        
         for planet in self._planets:
             if (planet.name == new_name) and (planet != old_planet):
                 raise ValueError("Планета с таким названием уже есть")
@@ -265,6 +267,8 @@ class Planet_Database:
             raise ValueError("Редактировать можно только планету")
         if not(old_planet in self._planets):
             raise ValueError("Планета не найдена")
+        if not(isinstance(new_radius, (int, float))) or (new_radius <= 0):
+            raise ValueError("Радиус должен быть положительным числом")        
         old_planet.radius = new_radius
     
     def edit_planet_mass(self, old_planet, new_mass):
@@ -272,6 +276,8 @@ class Planet_Database:
             raise ValueError("Редактировать можно только планету")
         if not(old_planet in self._planets):
             raise ValueError("Планета не найдена")
+        if not(isinstance(new_mass, (int, float))) or (new_mass <= 0):
+            raise ValueError("Масса должна быть положительным числом")        
         old_planet.mass = new_mass
         
     def edit_planet_distance_from_sun(self, old_planet, new_distance_from_sun):
@@ -279,6 +285,8 @@ class Planet_Database:
             raise ValueError("Редактировать можно только планету")
         if not(old_planet in self._planets):
             raise ValueError("Планета не найдена")
+        if not(isinstance(new_distance_from_sun, (int, float))) or (new_distance_from_sun <= 0):
+            raise ValueError("Расстояние от Солнца должно быть положительным числом")        
         old_planet.distance_from_sun = new_distance_from_sun
         
     def edit_planet_planet_type(self, old_planet, new_planet_type):
@@ -286,6 +294,8 @@ class Planet_Database:
             raise ValueError("Редактировать можно только планету")
         if not(old_planet in self._planets):
             raise ValueError("Планета не найдена")
+        if not(isinstance(new_planet_type, str)) or not(new_planet_type in ("каменная", "газовый гигант", "ледяной гигант")):
+            raise ValueError("Типы планет: каменная, газовый гигант, ледяной гигант")        
         old_planet.planet_type = new_planet_type
     
     def view_planets(self):
